@@ -1,4 +1,4 @@
-/** Pure-logic tests for the ported helpers (no pi / no OpenCode host needed). `bun test`. */
+/** Pure-logic tests for multi-account helpers (no OpenCode host needed). */
 
 import assert from "node:assert/strict"
 import test from "node:test"

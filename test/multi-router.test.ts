@@ -1,7 +1,5 @@
 /**
- * Ported (pi-dependency-free) tests for the rotation core.
- * Original pi-multi-router/test.ts drove a fake ExtensionAPI; these tests keep
- * the same behavioural coverage against the pure core module instead.
+ * Tests for the multi-router rotation core.
  * Run with `bun test`.
  */
 

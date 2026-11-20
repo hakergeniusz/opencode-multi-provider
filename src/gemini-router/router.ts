@@ -1,7 +1,7 @@
 /**
  * Pure routing / quota helpers for opencode-gemini-router.
  *
- * This module has no dependency on OpenCode or on the pi runtime, so the
+ * This module has no dependency on OpenCode or other host runtimes, so the
  * rotation and quota-classification logic can be unit tested on its own.
  * Treat every string passed to these helpers as untrusted data.
  */

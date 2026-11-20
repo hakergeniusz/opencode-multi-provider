@@ -1,7 +1,7 @@
 /**
- * Port of the original pi-groq-compat smoke test.
+ * Smoke tests for the groq-compat module.
  *
- * Stubs the OpenCode V2 plugin context surface that this plugin touches and
+ * Stubs the OpenCode V2 plugin context surface that this module touches and
  * asserts that loading it registers the groq provider with the compat fix and
  * the curated model list, plus the /groq-compat command.
  *

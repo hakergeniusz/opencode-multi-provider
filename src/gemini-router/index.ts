@@ -1,26 +1,24 @@
 /**
  * opencode-gemini-router — native OpenCode V2 provider/model routing plugin.
  *
- * Ported from `pi-gemini-router`. The original offered two virtual models on
- * the `google` provider:
+ * Provides two virtual models on the configured Google provider:
  *
  *   google/gemini-flash        ladder: gemini-4-hydrogen → gemini-flash-latest → 3.8 → … → 3-flash-preview
  *   google/gemini-flash-lite   ladder: gemini-flash-lite-latest → 3.5-flash-lite → 3.1-flash-lite
  *
- * and walked the (model, key) matrix until one pair answered. In OpenCode V2
- * the equivalents are:
+ * and walks the (model, key) matrix until one pair answers. In OpenCode V2
+ * this is implemented by:
  *
- *   - register router models via `ctx.provider.transform`
- *   - route a request to the current ladder entry via the
+ *   - registering router models via `ctx.provider.transform`
+ *   - routing a request to the current ladder entry via the
  *     `experimental.model.resolve` session hook
- *   - rotate API keys via the `http.request` hook (OpenCode's resolve hook
- *     cannot cross providers, so `google-keyN` providers from pi-multi-account
- *     are replaced by an ordered key list applied to the `google` provider)
- *   - make quota 429s retryable and advance the pair via the `retry` hook
- *   - persist state/quota marks via `ctx.storage`
+ *   - rotating API keys via the `http.request` hook (an ordered key list
+ *     applied to the Google provider)
+ *   - making quota/rotatable failures retryable and advancing the pair via the `retry` hook
+ *   - persisting state/quota marks via `ctx.storage`
  *   - `/gemini-router` via `ctx.command.transform`
  *
- * See README.md for the mapping notes and gaps. Treat all external data
+ * See README.md for configuration notes. Treat all external data
  * (config files, options, error strings, HTTP bodies) as untrusted.
  */
 

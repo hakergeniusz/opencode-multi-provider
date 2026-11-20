@@ -1,34 +1,26 @@
 /**
- * opencode-groq-compat — native OpenCode V2 port of `pi-groq-compat`.
+ * opencode-groq-compat — native OpenCode V2 Groq provider compatibility module.
  *
- * The original pi extension fixed two things about Groq's OpenAI-compatible
- * chat API, and exposed a `/groq-compat` command with status/refresh/test.
+ * Keeps the built-in `groq` provider usable by:
  *
- * 1. "developer role" fix (pi-specific). Pi's OpenAI-completions adapter sent
- *    `role: "developer"` for system prompts unless a model's compat set
- *    `supportsDeveloperRole: false`; Groq's llama.cpp templates only accept
- *    `role: "system"` and returned a 400 minijinja templating error.
- *
- *    OpenCode V2 has NO `supportsDeveloperRole` compatibility field — its
- *    `@opencode/ai/providers/openai-compatible` provider (Vercel AI SDK based)
- *    emits `role: "system"` for chat-completions system messages and OpenCode's
- *    internal message model has no "developer" role at all. The bug therefore
- *    does not exist in this host; nothing to patch. See README "Gaps".
- *
- * 2. Model-catalog drift + `max_tokens` field (still meaningful). This plugin
- *    uses `ctx.provider.transform` to keep the built-in `groq` provider's auth
- *    and settings while replacing its model inventory with a curated set of
+ * 1. Model catalog and limits: replaces its model inventory with a curated set of
  *    chat models, verified context/output limits, and
- *    `compatibility.maxTokensField = "max_tokens"` (Groq has no
- *    `max_completion_tokens`). Audio models, prompt-guard classifiers and
+ *    `compatibility.maxTokensField = "max_tokens"` (Groq expects `max_tokens`,
+ *    not `max_completion_tokens`). Audio models, prompt-guard classifiers and
  *    retired enterprise-only ids are excluded.
+ *
+ * 2. Live sync and diagnostics: can refresh from GET /models and exposes a
+ *    `/groq-compat` command with status/refresh/test.
+ *
+ * OpenCode's chat-completions integration emits `role: "system"` for system
+ * messages, so no Groq developer-role workaround is required.
  *
  * Commands:
  *   /groq-compat           status: key state, active model, registered models
  *   /groq-compat refresh   re-read GET /models and re-register (then reload)
  *   /groq-compat test      send a developer-role probe to the active groq model
  *
- * Auth is never read, stored or transmitted by this plugin except for the
+ * Auth is never read, stored or transmitted by this module except for the
  * optional probe in `test`; the provider's own credentials are left untouched.
  */
 
@@ -75,7 +67,7 @@ function isChatModelId(id: string): boolean {
 }
 
 function groqApiKey(): string | undefined {
-  // Same fallback chain the original used. Only the `test` command reads it.
+  // Fallback chain for the optional `test` probe.
   return process.env.GROQ_API_KEY || process.env.GROQ_API_KEY_2 || process.env.GROQ_API_KEY_1
 }
 
@@ -84,9 +76,9 @@ function staticIds(): string[] {
 }
 
 /**
- * Build OpenCode V2 `Model.Info` values from the pi model definitions.
+ * Build OpenCode V2 `Model.Info` values from the curated model definitions.
  * `Model.Info.default` supplies every required branded/default field; we only
- * override the fields the original extension cared about.
+ * override the fields needed for Groq compatibility.
  */
 function buildModels(ids: string[]) {
   const providerID = Provider.ID.make(PROVIDER_ID)
@@ -102,8 +94,7 @@ function buildModels(ids: string[]) {
         input: ["text"],
         output: ["text"],
       },
-      // OpenCode V2 compat: Groq uses `max_tokens`, not `max_completion_tokens`.
-      // This is the direct V2 equivalent of pi's `compat.maxTokensField`.
+      // Groq expects `max_tokens` instead of `max_completion_tokens`.
       compatibility: { ...(base.compatibility ?? {}), maxTokensField: "max_tokens" },
     } as typeof base
   })

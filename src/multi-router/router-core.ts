@@ -101,9 +101,9 @@ export function findRoutable(
 }
 
 /**
- * Errors a different key (or the next model) can still answer. Pi's own retry
- * classifier does not retry 401 or a quota error that reads as billing, so the
- * router forces those to rotate instead of sitting on a broken key forever.
+ * Errors a different key (or the next model) can still answer. The host's
+ * default retry classifier may not retry 401 or quota/billing-flavored errors,
+ * so the router forces rotation instead of sitting on a broken key forever.
  */
 export const ROTATABLE_ERROR_PATTERN =
   /401|403|invalid.?api.?key|Incorrect API key|Unauthorized|PERMISSION_DENIED|429|rate.?limit|too many requests|quota|RESOURCE_EXHAUSTED|overloaded|high demand|UNAVAILABLE|500|502|503|504|timed? out|timeout|connection.?error|fetch failed/i

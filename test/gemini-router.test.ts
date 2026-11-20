@@ -1,6 +1,6 @@
-// Pure logic tests ported from pi-gemini-router's smoke.ts. No network, no
-// credentials, no pi/OpenCode dependencies.
-// Run: bun test/router.test.ts   (or node --experimental-strip-types test/router.test.ts)
+// Pure logic tests for the Gemini router helpers (no network, no credentials,
+// no host runtime).
+// Run: bun test test/gemini-router.test.ts
 import assert from "node:assert/strict"
 import {
   advanceState,
