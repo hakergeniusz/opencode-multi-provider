@@ -309,7 +309,6 @@ export async function setupMultiAccount(ctx: any) {
     )
 
     return () => clearInterval(timer)
-  },
-}
+  }
 
 export default Plugin.define({ id: PLUGIN_ID, setup: setupMultiAccount })

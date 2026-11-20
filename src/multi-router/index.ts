@@ -427,7 +427,6 @@ export async function setupMultiRouter(ctx: any) {
       epochs.clear()
       lastGood.clear()
     }
-  },
-}
+  }
 
 export default Plugin.define({ id: "opencode-multi-router", setup: setupMultiRouter })
