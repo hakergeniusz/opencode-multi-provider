@@ -249,7 +249,6 @@ export async function setupGroqCompat(ctx: any) {
         },
       })
     })
-  },
 }
 
 export default Plugin.define({ id: "opencode-groq-compat", setup: setupGroqCompat })

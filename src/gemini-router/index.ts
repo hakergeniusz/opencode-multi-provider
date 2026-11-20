@@ -473,7 +473,6 @@ export async function setupGeminiRouter(ctx: any) {
     return async () => {
       await Promise.all(registrations.map((r) => r.dispose()))
     }
-  },
 }
 
 export default Plugin.define({ id: "opencode-gemini-router", setup: setupGeminiRouter })

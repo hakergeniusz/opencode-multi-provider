@@ -126,7 +126,7 @@ export async function setupMultiAccount(ctx: any) {
         for (const account of group.accounts) {
           const providerID = Provider.ID.make(account.providerID)
           const compat = group.compat ?? {}
-          // pi's provider-level `compat` keys map mostly to OpenCode compatibility.
+          // Provider-level `compat` keys map to OpenCode provider compatibility fields where supported.
           const compatibility: Record<string, unknown> = {}
           for (const key of [
             "streamingUsage",
@@ -166,8 +166,7 @@ export async function setupMultiAccount(ctx: any) {
       sessionModels.set(event.sessionID, { providerID: event.model.providerID, id: event.model.id })
     })
 
-    // Every fresh prompt starts a new rotation budget (matches the pi
-    // extension's before_agent_start reset).
+    // Every fresh prompt starts a new rotation budget.
     await ctx.session.hook("prompt", (event) => {
       attempts.set(event.sessionID, 0)
     })
@@ -218,9 +217,8 @@ export async function setupMultiAccount(ctx: any) {
       }
     }
 
-    // Auto-switch on failure. OpenCode's retry hook is the natural counterpart
-    // of pi's message_end + agent_before_settle dance: switch the session model
-    // to the next account and retry immediately on the new key.
+    // Auto-switch on failure: switch the session model to the next account and
+    // retry immediately on the new key when a failure is rotatable.
     await ctx.session.hook("retry", async (event) => {
       if (cfg.autoSwitchOnFailure === false) return
       const group = findGroupByProvider(groups, event.model.providerID)

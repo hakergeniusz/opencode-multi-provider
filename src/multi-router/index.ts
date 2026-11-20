@@ -1,5 +1,5 @@
 /**
- * opencode-multi-router — native OpenCode V2 port of pi-multi-router.
+ * OpenCode multi-router module — native V2 ladder and key-rotation router.
  *
  * Registers a virtual OpenAI-compatible provider (`multirouter`) with four
  * router models that walk a model ladder and rotate multi-account API keys
@@ -236,12 +236,12 @@ export async function setupMultiRouter(ctx: any) {
 
     // --- hooks --------------------------------------------------------------
 
-    // A new user prompt starts a fresh walk (pi: before_agent_start).
+    // A new user prompt starts a fresh walk.
     await ctx.session.hook("prompt", async (event) => {
       await resetTried(event.sessionID)
     })
 
-    // A completed turn resets the failure counter (pi: turn_end/completed).
+    // A completed turn resets the failure counter.
     // experimental.idle deliberately does not fire on failure/interruption.
     await ctx.session.hook("experimental.idle", async (event) => {
       await resetTried(event.sessionID)

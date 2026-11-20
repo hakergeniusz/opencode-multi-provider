@@ -113,14 +113,11 @@ function readJson(path: string): MultiAccountConfig | undefined {
   }
 }
 
-/** Config file locations, in merge order (last wins). Both pi-era and
- * OpenCode-era locations are honoured so existing configs keep working. */
+/** Config file locations, in merge order (last wins). */
 export function configPaths(directory: string): string[] {
   const home = homedir()
   return [
-    join(home, ".pi", "agent", "multi-account.json"),
     join(home, ".config", "opencode", "multi-account.json"),
-    join(directory, ".pi", "multi-account.json"),
     join(directory, ".opencode", "multi-account.json"),
   ]
 }
