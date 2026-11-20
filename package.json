@@ -1,0 +1,33 @@
+{
+  "name": "opencode-multi-provider",
+  "version": "0.1.0",
+  "description": "Unified OpenCode V2 plugin for multi-key/provider account stacking: generic virtual accounts, Gemini router (ladder + quota + key rotation), Groq compat/catalog fixes, and Groq/Cohere multi-router ladders.",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "multi-account",
+    "key-rotation",
+    "gemini",
+    "groq",
+    "cohere",
+    "router"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./tui": "./src/multi-account/tui.ts"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "@opencode/plugin": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "typescript": "latest"
+  }
+}
